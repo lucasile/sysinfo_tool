@@ -169,6 +169,27 @@ If graphics were specified, we implement it similarly to [`displayMemoryUsage()`
 
 Finally, we just loop through the history by using `sampleCount` as the exclusive upper bound, and print each respective line.
 
+###### getCPUTimes
+
+In the [`getCPUTimes(int*, int*)`](#getCPUTimes) function, we open and parse the `/proc/stat` file to gather CPU times.
+
+To do this, we use `FILE *stat = fopen("/proc/stat", "r")`. If this file is NULL, then we've encountered an error and we return out of the function.
+
+We then define two integer variables, `currentTotalTime` and `currentIdleTime` and set them to 0. 
+
+Next we define a char array called `cpu` and use `fscanf(stat, "%s', cpu)` to get the first string in the file and put it into `cpu`. 
+
+Afterwards, we compare this string using `strcmp(cpu, "cpu")` to make sure we are looking at the right line in the file. Otherwise, we return out of the function.
+
+Now we can proceed to looping over the seven columns in the first line. I set a constant integer variable called `STAT_COLUMNS` to 7 and we loop from 0 to up to it. 
+
+Inside the loop, we define an integer variable, `time`, then set it to the next integer in the file using `fscanf(stat, "%d", &time)`. Then we add it to `currentTotalTime`. If the column we're going over is the idle column (`IDLE_COLUMN`, 4), then we also set `currentIdleTime` to time.
+
+After the loop, we then set the `totalTime` and `idleTime` parameters to `currentTotalTime` and `currentIdleTime`.
+
+We then close the file using `fclose(stat)`.
+
+
 
 
 

@@ -1,5 +1,7 @@
 # System Information Tool for Linux. Made for CSCB09
 
+Author: Lucas Ilea
+
 Table of contents
 =================
 
@@ -7,6 +9,7 @@ Table of contents
    * [Documentation](#documentation)
       * [Compilation](#compilation)
 	  * [Arguments](#arguments)
+	  * [Code](#code)
 <!--te-->
 
 Documentation
@@ -92,7 +95,20 @@ By default, the program will take 10 samples with 1 second in between each sampl
 
 ***
 
+Code
+---
 
+Near the start of the file, you will find two constant string arrays (2D char arrays), that define the help command messages and error messages. This is to keep them in one place and organized so I can easily change them if I need to in the future.
+
+There are also other constants to define how the `/proc/stat` file is formatted and the graphics scale for both CPU and memory utilization.
+
+Underneath are a collection of the function prototypes.
+
+###### main
+
+In the `main` function, we define an array of 6 integers that represent the possible argument flags passed to the program. 0 represents off, and 1 represents on. For samples and time delay, we just put their respective default values, since they are always on.
+
+Then we call a function `setFlags(int*, int, char**)` that will take in a reference to the flags array, argc value, and a reference to the argv array. 
 
 
 

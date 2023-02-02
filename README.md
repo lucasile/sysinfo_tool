@@ -1,10 +1,19 @@
 # System Information Tool for Linux. Made for CSCB09
 
-## Documentation
+Table of contents
+=================
 
+<!--ts-->
+   * [Documentation](#documentation)
+      * [Compilation](#compilation)
+	  * [Arguments](#arguments)
+<!--te-->
+
+Documentation
 ---
 
-### Compilation
+Compilation
+---
 
 To compile to an executable, run 
 
@@ -12,9 +21,8 @@ To compile to an executable, run
 
 in a terminal in the same directory as system_info.c
 
+Arguments
 ---
-
-### Arguments
 Running the program with `$ ./sysinfo --help` you will see the possible arguments:
 
 ```bash
@@ -41,7 +49,7 @@ To have a graphical output of the CPU and memory utilization, run
 `$ ./sysinfo --graphics`
 Note: This will have no effect on user statistics.
 
----
+***
 
 ###### Graphical Legend
 ':' represents a unit of relative decrease of the memory utilization since the last sample.
@@ -49,7 +57,7 @@ Note: This will have no effect on user statistics.
 A relative decrease graphical string will be suffixed by '@'.
 A relative increase graphical string will be suffixed by '*'.  
 
----
+***
 
 To view the output of the program without the terminal refreshing after samples, run
 `$ ./sysinfo --sequential`
@@ -59,30 +67,30 @@ To modify the amount of samples taken run,
 `$ ./sysinfo --samples=N`
 where N represents the amount of samples you want as a positive integer.
 
----
+***
 
 ###### Example
 
 `$ ./sysinfo --samples=5` will only take 5 samples.
 
----
+***
 
 To modify the time between samples, run,
 `$ ./sysinfo --tdelay=N`
 where N represents the time taken between samples in seconds as a positive integer.
 
----
+***
 
 ###### Example
 
 `$ ./sysinfo --tdelay=2` will take 2 seconds between samples.
 
----
+***
 
 By default, the program will take 10 samples with 1 second in between each sample aka
 `$ ./sysinfo --samples=10 --tdelay=1`
 
----
+***
 
 
 

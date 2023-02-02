@@ -205,7 +205,7 @@ void displayMemoryUsage(int graphics, int sampleSize, int sampleCount, char hist
 
     }
 
-    strcat(history[sampleCount - 1], graphicsLine);
+    strncat(history[sampleCount - 1], graphicsLine, sizeof(history[sampleCount - 1]));
   }
 
   for (int i = 0; i < sampleCount; i++) {

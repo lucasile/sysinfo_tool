@@ -106,7 +106,7 @@ Underneath are a collection of the function prototypes.
 
 ###### main
 
-In the [`main`](#main) function, we define an array of 6 integers that represent the possible argument flags passed to the program. 0 represents off, and 1 represents on. For samples and time delay, we just put their respective default values, since they are always on.
+In the [`main()`](#main) function, we define an array of 6 integers that represent the possible argument flags passed to the program. 0 represents off, and 1 represents on. For samples and time delay, we just put their respective default values, since they are always on.
 
 Then we call a function [`setFlags(int*, int, char**)`](#setFlags) that will take in a reference to the flags array, argc value, and a reference to the argv array.  It will take the arguments provided from the user, parse them, and update the flags array accordingly. If [`setFlags()`](#setFlags) returns 0, there was an error and we return 0 in main to terminate execution of the program.
 
@@ -114,7 +114,19 @@ If there is no error, then we call a function [`composeStats(int*)`](#composeSta
 
 ###### displayUserUsage
 
-###### setFlags
+In the [`displayUserUsage()`](#displayUserUsage) function, we use **utmp.h** to get all the user entries.
+
+Firstly, we reset the pointer to the beginning of the users using `setutent()`. Then we can declare a struct `struct utmp *userEntry = getutent();` which will store a process into the struct. Afterwards we loop until all the entries have been gone over. Inside the loop, we make sure that the process is a user process, then we get the user's information, print it out accordingly, then assign the next user using `getutent()`.
+
+Note: After we are done sampling everything, we accordingly call `endutent()` at the end of [`composeStats(int*)`](#composeStats).
+
+###### displaySystemInformation
+
+In the [`displaySystemInformation()`](#displaySystemInformation) function, we create a buffer struct where we use `uname()` to populate it with system information. If `uname()` returns -1, we have an error and we return out of the function. Otherwise, we can simply access the buffer and print out the system information.
+
+###### displayMemoryUsage
+
+In the [`displayMemoryUsage(int, int sampleSize, int, char[sampleSize][256], double[sampleSize])`](#displayMemoryUsage) function, 
 
 
 

@@ -48,7 +48,7 @@ To see system information including CPU and memory utilization, run
 `$ ./sysinfo --system`
 Note: The program will pause for 500ms at the beginning when running this argument to provide accurate data by gathering a baseline sample.
 
-To see how memory information is being parsed and converted, see [`displayMemoryUsage()`](#displayMemoryUsage).
+To see how memory information is being calculated and converted, see [`displayMemoryUsage()`](#displayMemoryUsage).
 
 To have a graphical output of the CPU and memory utilization, run
 `$ ./sysinfo --graphics`
@@ -128,7 +128,14 @@ In the [`displaySystemInformation()`](#displaySystemInformation) function, we cr
 
 ###### displayMemoryUsage
 
-In the [`displayMemoryUsage(int, int sampleSize, int, char[sampleSize][256], double[sampleSize])`](#displayMemoryUsage) function, we create a buffer struct, then use `sysinfo()` to populate it with memory information. If `sysinfo()` returns -1, we have an error and we return out of the function. Otherwise, 
+In the [`displayMemoryUsage(int, int sampleSize, int, char[sampleSize][256], double[sampleSize])`](#displayMemoryUsage) function, we create a buffer struct, then use `sysinfo()` to populate it with memory information. If `sysinfo()` returns -1, we have an error and we return out of the function. Otherwise, we calculate and convert the information into usable data as follows.
+
+total_ram = total_bytes / 1000000000.
+total_virtual_ram = total_ram + (total_swap / 1000000000)
+used_ram = total_ram - (free_ram / 1000000000)
+used_virtual_ram = total_virtual_ram - ((free_ram + free_swap) / 1000000000)
+
+
 
 
 

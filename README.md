@@ -106,9 +106,16 @@ Underneath are a collection of the function prototypes.
 
 ###### main
 
-In the `main` function, we define an array of 6 integers that represent the possible argument flags passed to the program. 0 represents off, and 1 represents on. For samples and time delay, we just put their respective default values, since they are always on.
+In the [`main`](#main) function, we define an array of 6 integers that represent the possible argument flags passed to the program. 0 represents off, and 1 represents on. For samples and time delay, we just put their respective default values, since they are always on.
 
-Then we call a function `setFlags(int*, int, char**)` that will take in a reference to the flags array, argc value, and a reference to the argv array. 
+Then we call a function [`setFlags(int*, int, char**)`](#setFlags) that will take in a reference to the flags array, argc value, and a reference to the argv array.  It will take the arguments provided from the user, parse them, and update the flags array accordingly. If [`setFlags()`](#setFlags) returns 0, there was an error and we return 0 in main to terminate execution of the program.
+
+If there is no error, then we call a function [`composeStats(int*)`](#composeStats) that will take in a reference to the flags array, and accordingly compose the proper output to the terminal based on the flags specified. 
+
+###### displayUserUsage
+
+###### setFlags
+
 
 
 

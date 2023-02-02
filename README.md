@@ -130,10 +130,10 @@ In the [`displaySystemInformation()`](#displaySystemInformation) function, we cr
 
 In the [`displayMemoryUsage(int, int sampleSize, int, char[sampleSize][256], double[sampleSize])`](#displayMemoryUsage) function, we create a buffer struct, then use `sysinfo()` to populate it with memory information. If `sysinfo()` returns -1, we have an error and we return out of the function. Otherwise, we calculate and convert the information into usable data as follows.
 
-total_ram = total_bytes / 1000000000.
-total_virtual_ram = total_ram + (total_swap / 1000000000)
-used_ram = total_ram - (free_ram / 1000000000)
-used_virtual_ram = total_virtual_ram - ((free_ram + free_swap) / 1000000000)
+total_ram = total_bytes / 1000000000  
+total_virtual_ram = total_ram + (total_swap / 1000000000)  
+used_ram = total_ram - (free_ram / 1000000000)  
+used_virtual_ram = total_virtual_ram - ((free_ram + free_swap) / 1000000000)  
 
 
 

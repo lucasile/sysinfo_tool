@@ -183,11 +183,58 @@ Afterwards, we compare this string using `strcmp(cpu, "cpu")` to make sure we ar
 
 Now we can proceed to looping over the seven columns in the first line. I set a constant integer variable called `STAT_COLUMNS` to 7 and we loop from 0 to up to it. 
 
-Inside the loop, we define an integer variable, `time`, then set it to the next integer in the file using `fscanf(stat, "%d", &time)`. Then we add it to `currentTotalTime`. If the column we're going over is the idle column (`IDLE_COLUMN`, 4), then we also set `currentIdleTime` to time.
+Inside the loop, we define an integer variable, `time`, then set it to the next integer in the file using `fscanf(stat, "%d", &time)`. Then we add it to `currentTotalTime`. If the column we're going over is the idle column (`IDLE_COLUMN`, 4), then we also set `currentIdleTime` to `time`.
 
 After the loop, we then set the `totalTime` and `idleTime` parameters to `currentTotalTime` and `currentIdleTime`.
 
 We then close the file using `fclose(stat)`.
+
+###### getUsagePercent
+
+In the [`getUsagePercent(int, int)`](#getUsagePercent) function, we just return `(1 - (idleTime / totalTime)) * 100` to get the amount of time the CPU has not been idle in a percent.
+
+###### getCurrentProcessUsage
+
+In the [`getCurrentProcessUsage()`](#getCurrentProcessUsage) function, we open the `/proc/self/status` file using `FILE *status = fopen("/proc/self/status", "r")`. 
+
+We then define a char array of length 30 as `key`, and an integer variable called `currentValue`.
+
+We then try to find the `VmRSS:` row in the file by looping through until the key is equivalent to that string, checking using `strcmp(key, "VmRSS:")`.
+
+Inside of the loop, we use `fscanf(status, "%s %d", key, &currentValue)` to keep saving the new key and value of that key to their respective variables. We also check if it's the end of the file, in which case we close the file using `fclose(status)` and we return -1. Once we come across `VmRSS:`, the loop exits and we close the file using `fclose(status)`, then return `currentValue` since it has been assigned the correct value that is paired with `VmRSS:`.
+
+###### composeStats
+
+In the [`composeStats(int*)`] function, we define integer variables respective to every element in the `flags` array, to make it so we don't have to keep accessing the array.
+
+We also define a `cpuSleepTime` double variable and assign it a value of 500000, which represents a number of microseconds. We also define integer variables `totalTime`, and `idleTime` .
+
+We then check if the program should show the system information, in which case we call [`refreshScreen()`](#refreshScreen) to refresh the screen (Note: We do this regardless of sequential being specified or not, since this only happens once), after which we call [`getCPUTimes()`](#getCPUTimes) and give it the memory addresses of `totalTime` and `idleTime` to populate them with the respective values. Afterwards we sleep for the amount in `cpuSleepTime` using `usleep()`. This was to grab baseline CPU time values so that we can calculate relative values when we actually calculate the utilization.
+
+Then we define two string arrays of length `samples` and string length of 256, to store the memory string history and cpu string history. We also define a double array of length `samples` to store the memory usage history.
+
+We then loop from 1 to upper bound  of `samples + 1` excluded.
+
+Inside the loop, we call [`refreshScreen()`](#refreshScreen) to refresh the screen only if sequential was not specified.
+
+We then print the amount of samples, `samples` and how much time are in between them, `timeDelay`.
+
+Afterwards we find the memory usage of the current process by calling [`getCurrentProcessUsage()`](#getCurrentProcessUsage). We then print this value suffixed by 'kB'.
+
+If user was specified, we call [`displayUserUsage()`](#displayUserUsage). If system was specified, we call [`displaySystemInformation`](#displaySystemInformation), [`displayMemoryUsage()`](#displayMemoryUsage), and [`displayCPUUsage()`](#displayCPUUsage()), with all the variables we have defined previously.
+
+We then flush stdout using `fflush(stdout)` to ensure that our samples get printed during each iteration of the loop, or else they may still be pending inside the buffer and only will print at the end of the samples being taken. Finally, we sleep for the specified `timeDelay` using `sleep(timeDelay)`
+
+Outside of the loop, we also call `endutent()`.
+
+###### refreshScreen
+
+In the [`refreshScreen()`](#refreshScreen) function, we print two escape codes. Firstly we run `printf("\033[0;0H]")` to set the cursor to zero to make sure samples get printed starting in the top left corner of the terminal. Then we run `printf("\033[2J")` to clear the screen.
+
+###### setFlags
+
+In the [`setFlags(int*, int, char**)`](#setFlags) function, we first save the name of the executable ran into a variable by `argv[0]`
+
 
 
 

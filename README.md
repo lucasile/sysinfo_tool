@@ -137,19 +137,37 @@ used_virtual_ram = total_virtual_ram - ((free_ram + free_swap) / 1000000000)
 
 Since the memory utilization part shows previous samples, we must store the previously outputted strings in some history array. This is the `char history[sampleSize][256]` parameter. To save the formatted string in the array, we also have an `int sampleCount` parameter that indicates the sample that's currently being rendered. Using these values, we can use `snprintf(history[sampleCount - 1], sizeof(history[sampleCount - 1]), formatted_string_here, values...)` to save the string to the proper location in the array.
 
-If graphical implementation was specified, we will now create a new string called `graphicsLine` that we will concatenate using `strncat()` to our previous string at `history[sampleCount - 1]`. 
+If graphics were specified, we will now create a new string called `graphicsLine` that we will concatenate using `strncat()` to our previous string at `history[sampleCount - 1]` after composing it. 
 
 To compose `graphicsLine`, we first check what our maximum length can be based on how much ram exists in the system, and what the scale we set is. For example, if `RAM_GRAPHICS_SCALE = 0.1`, then for every 0.1 gb change of the memory utilization, we will add a single graphical character. Similarily to saving the strings in history, we also need to save the memory used in a double array to calculate relative usage. We do this by setting `historyRam[sampleCount - 1] = usedRam;`
 
-We then use `strcpy()` to copy a single '|' to the string. We then check if this is the first sample. If it is, then we will just set the baseline key as `*`. Otherwise, we need to calculate the relative utilization.
+We then use `strcpy()` to copy a single '|' to the string. We then check if this is the first sample. If it is, then we will just set the baseline key as '\*'. Otherwise, we need to calculate the relative utilization.
 
-To do this, we just get the last entry in the double array by using `historyRam[sampleCount - 2]`, and then find the delta with the current memory used by subtracting them. Afterwards, we can just loop until a double exceeds this delta, incrementing by the `RAM_GRAPHICS_SCALE` each time. However, if the delta is negative, our loop is incorrect. For purely the loop's functionality, we then use the absolute value of the delta instead.
+To do this, we just get the last entry in the double array by using `historyRam[sampleCount - 2]`, and then find the delta with the current memory used by subtracting them. Afterwards, we can just loop until a double exceeds this delta, incrementing by the `RAM_GRAPHICS_SCALE` each time. However, if the delta is negative, our loop is incorrect. For purely the loop's functionality, we use the absolute value of the delta instead.
 
 Inside of the loop we check whether the delta is negative or positive. If it is negative, we concatenate the character ':' and if it is positive, we concatenate the character '#'. 
 
 Similarily, outside of the loop we cap the string using the characters '@' and '\*' depending on whether the delta was negative or positive respectively.
 
 Afterwards we also want to append the delta to the string, so we use `snprintf()` to format it to a string, then use `strncat()` to concatenate it to `graphicsLine`.
+
+Finally, we just loop through the history by using `sampleCount` as the exclusive upper bound, and print each respective line.
+
+###### displayCPUUsage
+
+In the [`displayCPUUsage(int, int*, int*, int sampleSize, int, char[sampleSize][256])`](#displayCPUUsage) function, we use `get_nprocs()` from `sys/sysinfo.h` to find the number of CPU cores in the system. Afterwards, we need to calculate the CPU utilization.
+
+We declare two integer variables, `totalTime` and `idleTime`. We then pass their addresses to [`getCPUTimes(int*, int*)`](#getCPUTimes) to populate them with the total time the CPU has been active for, and the CPU's idle time respectively.
+
+Since getting these CPU times will give us the total time the CPU has been working since the system has started, and similarily for idle time, we must find the deltas for these values after some time. To do this, we subtract the `lastTotalTime` and `lastIdleTime` parameters from `totalTime` and `idleTime` respectively. We then call [`getUsagePercent(int, int)`](#getUsagePercent) to find the CPU utilization percent in the form of a double. Afterwards, we can set `lastTotalTime` to `totalTime` and `lastIdleTime` to `idleTime` for the next sample. 
+
+However, we don't have a `lastTotalTime` and `lastIdleTime` for the first sample. To account for this, we will grab a baseline sample in [`composeStats(int*)`](#composeStats) and wait 0.5s to set these variables.
+
+We then print out the CPU usage.
+
+If graphics were specified, we implement it similarly to [`displayMemoryUsage()`](#displayMemoryUsage). The difference is that we don't need to account for a delta and append different characters. All we do is append the character `|` for every unit of scale specified by `CPU_GRAPHICS_SCALE`. 
+
+Finally, we just loop through the history by using `sampleCount` as the exclusive upper bound, and print each respective line.
 
 
 

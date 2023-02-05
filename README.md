@@ -20,11 +20,11 @@ Compilation
 
 To compile to an executable, run 
 
-`$ gcc -lm -o sysinfo system_info.c`
+`$ gcc -o sysinfo system_info.c -lm`
 
 in a terminal in the same directory as system_info.c
 
-We use `-lm` to link the `math.h` library.
+We append `-lm` to link the `math.h` library.
 
 Arguments
 ---

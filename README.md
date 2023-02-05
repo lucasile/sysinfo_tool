@@ -106,7 +106,7 @@ Near the start of the file, you will find two constant string arrays (2D char ar
 
 There are also other constants to define how the `/proc/stat` file is formatted and the graphics scale for both CPU and memory utilization.
 
-Underneath are a collection of the function prototypes.
+Underneath are a collection of the functions.
 
 ###### main
 

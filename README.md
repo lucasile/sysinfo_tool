@@ -24,7 +24,7 @@ To compile to an executable, run
 
 in a terminal in the same directory as system_info.c
 
-We append `-lm` to link the `math.h` library.
+We append `-lm` to link `libm` for `math.h`.
 
 Arguments
 ---

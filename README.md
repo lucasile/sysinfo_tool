@@ -233,8 +233,25 @@ In the [`refreshScreen()`](#refreshScreen) function, we print two escape codes. 
 
 ###### setFlags
 
-In the [`setFlags(int*, int, char**)`](#setFlags) function, we first save the name of the executable ran into a variable by `argv[0]`
+In the [`setFlags(int*, int, char**)`](#setFlags) function, we first save the name of the executable ran into a variable by `argv[0]`. This is so that we can print the command name in the help page depending on what the name of the file is, in case the user changed it. Then we loop from 1 to the length of the arguments so that we can go through all the arguments provided to the program through the command line after the executable name. 
 
+Afterwards we define and declare a string, `flag`, using `strtok(argv[i], "=")` to get the key of the argument in case the argument is one where a variable option can be provided, such as `--samples=N and --tdelay=N`. If there is no such variable option, it will still set the flag to the key regardless, so we don't have to check for it. Then we check if the flag provided is `--help` using `strcmp()` in which case we call [`printHelpPage(execName)`](#printHelpPage) using the name of the executable as the argument. We then return 0 to halt the program as specified in  [`main()`][#main]. 
+
+Similarily, we compare the other flags using `strcmp()`. In the case that we come across `--user`, we simply set `flags[0]` to 1  to turn it on as that is the index that corresponds to users. The same goes for `--system`, `--graphics`, and `--sequential`. 
+
+If we find a `--samples`, we then need to get the value after the `=`. To do this, we use `strtok()` again on the same pointer. If it returns null, then we know the user didn't follow the required format, in which case we print the corresponding error message and return 0. Otherwise, we then convert the value they specified to an int named `sampleSize` using `strtol()`. We then check if `sampleSize` is valid (>0), and then we set the appropriate element in the `flags` array, `flags[4]` to it. If it is not valid, we then print the corresponding error message and return 0.
+
+The same goes for `--tdelay` as above.
+
+Then if an argument does not match any of these, the final else statement will send an error message and return 0.
+
+Outside of the loop, we check if user and system in `flags` were set. If both were not set, then we set them on as default. 
+
+Finally we return 1 since if we got here, there has been no error.
+
+######printHelpPage
+
+In the [`printHelpPage(char*)`](#printHelpPage) function, we simply get the length of the constant `HELP_COMMANDS` array by getting the whole size of the array using `sizeof`, and dividing by the `sizeof` one of the elements in the array, `HELP_COMMANDS[0]` being one. Then we can iterate through the array by looping from 0 to the length found earlier exclusively, and printing each one out making sure to provide `execName` at the beginning to give the correct command names.
 
 
 

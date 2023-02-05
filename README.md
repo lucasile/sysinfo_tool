@@ -122,7 +122,7 @@ In the [`displayUserUsage()`](#displayUserUsage) function, we use **utmp.h** to 
 
 Firstly, we reset the pointer to the beginning of the users using `setutent()`. Then we can declare a struct `struct utmp *userEntry = getutent();` which will store a process into the struct. Afterwards we loop until all the entries have been gone over. Inside the loop, we make sure that the process is a user process, then we get the user's information, print it out accordingly, then assign the next user using `getutent()`.
 
-Note: After we are done sampling everything, we accordingly call `endutent()` at the end of [`composeStats(int*)`](#composeStats).
+After the loop we call `endutent()` to properly close the stream.
 
 ###### displaySystemInformation
 
@@ -226,8 +226,6 @@ Afterwards we find the memory usage of the current process by calling [`getCurre
 If user was specified, we call [`displayUserUsage()`](#displayUserUsage). If system was specified, we call [`displaySystemInformation`](#displaySystemInformation), [`displayMemoryUsage()`](#displayMemoryUsage), and [`displayCPUUsage()`](#displayCPUUsage()), with all the variables we have defined previously.
 
 We then flush stdout using `fflush(stdout)` to ensure that our samples get printed during each iteration of the loop, or else they may still be pending inside the buffer and only will print at the end of the samples being taken. Finally, we sleep for the specified `timeDelay` using `sleep(timeDelay)`
-
-Outside of the loop, we also call `endutent()`.
 
 ###### refreshScreen
 

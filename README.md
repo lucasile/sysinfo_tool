@@ -20,9 +20,11 @@ Compilation
 
 To compile to an executable, run 
 
-`$ gcc -o sysinfo system_info.c`
+`$ gcc -o sysinfo system_info.c -lm`
 
 in a terminal in the same directory as system_info.c
+
+We append `-lm` to link the `math.h` library.
 
 Arguments
 ---
@@ -143,7 +145,7 @@ To compose `graphicsLine`, we first check what our maximum length can be based o
 
 We then use `strcpy()` to copy a single '|' to the string. We then check if this is the first sample. If it is, then we will just set the baseline key as '\*'. Otherwise, we need to calculate the relative utilization.
 
-To do this, we just get the last entry in the double array by using `historyRam[sampleCount - 2]`, and then find the delta with the current memory used by subtracting them. Afterwards, we can just loop until a double exceeds this delta, incrementing by the `RAM_GRAPHICS_SCALE` each time. However, if the delta is negative, our loop is incorrect. For purely the loop's functionality, we use the absolute value of the delta instead.
+To do this, we just get the last entry in the double array by using `historyRam[sampleCount - 2]`, and then find the delta with the current memory used by subtracting them. Afterwards, we can just loop until a double exceeds this delta, incrementing by the `RAM_GRAPHICS_SCALE` each time. However, if the delta is negative, our loop is incorrect. For purely the loop's functionality, we use the absolute value of the delta instead, given by `fabs` in `math.h`.
 
 Inside of the loop we check whether the delta is negative or positive. If it is negative, we concatenate the character ':' and if it is positive, we concatenate the character '#'. 
 

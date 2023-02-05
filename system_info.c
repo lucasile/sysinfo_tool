@@ -107,6 +107,8 @@ void displayUserUsage() {
 
     userEntry = getutent();
   }
+  
+  endutent();
 
   printf("--------------------------------------\n");
 
@@ -404,9 +406,6 @@ void composeStats(int *flags) {
     fflush(stdout); // flush stdout so that every interval it is shown
     sleep(timeDelay);
   }
-
-  // properly end utent
-  endutent();
 
 }
 

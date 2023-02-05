@@ -249,7 +249,7 @@ Outside of the loop, we check if user and system in `flags` were set. If both we
 
 Finally we return 1 since if we got here, there has been no error.
 
-######printHelpPage
+###### printHelpPage
 
 In the [`printHelpPage(char*)`](#printHelpPage) function, we simply get the length of the constant `HELP_COMMANDS` array by getting the whole size of the array using `sizeof`, and dividing by the `sizeof` one of the elements in the array, `HELP_COMMANDS[0]` being one. Then we can iterate through the array by looping from 0 to the length found earlier exclusively, and printing each one out making sure to provide `execName` at the beginning to give the correct command names.
 

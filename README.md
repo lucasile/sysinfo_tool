@@ -205,7 +205,7 @@ Inside of the loop, we use `fscanf(status, "%s %d", key, &currentValue)` to keep
 
 ###### composeStats
 
-In the [`composeStats(int*)`] function, we define integer variables respective to every element in the `flags` array, to make it so we don't have to keep accessing the array.
+In the [`composeStats(int*)`](#composeStats) function, we define integer variables respective to every element in the `flags` array, to make it so we don't have to keep accessing the array.
 
 We also define a `cpuSleepTime` double variable and assign it a value of 500000, which represents a number of microseconds. We also define integer variables `totalTime`, and `idleTime` .
 
